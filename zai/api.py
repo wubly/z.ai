@@ -4,6 +4,7 @@ import threading
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 from zai.client import ZaiClient
@@ -20,6 +21,11 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="zai-api", lifespan=lifespan)
+
+
+@app.get("/", include_in_schema=False)
+def home() -> RedirectResponse:
+    return RedirectResponse("/docs")
 
 
 class chat_req(BaseModel):
